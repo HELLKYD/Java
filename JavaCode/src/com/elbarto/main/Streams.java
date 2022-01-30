@@ -1,6 +1,6 @@
 package com.elbarto.main;
 
-public class Main {
+public class Streams {
 
 	public static void main(String[] args) {
 
