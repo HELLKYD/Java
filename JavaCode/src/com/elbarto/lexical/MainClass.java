@@ -6,6 +6,7 @@ public class MainClass {
 		String sentence = "2 5.6 LOL";
 		Lexer lexer = new Lexer(sentence);
 		lexer.analyze();
+		System.out.println("finished");
 	}
 
 }
