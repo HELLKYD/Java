@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 public class Lexer {
 	private static String[] letters;
-	private static String[] numbers = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-	private static ArrayList<IntToken> intTokens = new ArrayList<>();
-	private static ArrayList<FloatToken> floatTokens = new ArrayList<>();
+	private static ArrayList<LSToken> ls_Tokens = new ArrayList<>();
 	private static int cur_Pos = 0;
 
 	public static void main(String[] args) {
@@ -17,8 +15,7 @@ public class Lexer {
 	public static void Analyze(String line) {
 		readAndSplit(line);
 		searchForNumberTypes();
-		PrintIntTokens();
-		PrintFloatTokens();
+		PrintTokens();
 		cur_Pos = 0;
 	}
 
@@ -60,14 +57,14 @@ public class Lexer {
 					if (isFloat) {
 						FloatCounter++;
 						float float_tok_value = Float.parseFloat(not_converted_chars);
-						FloatToken temp_tok = new FloatToken(float_tok_value);
-						floatTokens.add(temp_tok);
+						LSToken temp_tok = new LSToken(float_tok_value);
+						ls_Tokens.add(temp_tok);
 						cur_Pos = index;
 					} else {
 						IntCounter++;
 						int tok_value = Integer.parseInt(not_converted_chars);
-						IntToken temp_tok = new IntToken(tok_value);
-						intTokens.add(temp_tok);
+						LSToken temp_tok = new LSToken(tok_value);
+						ls_Tokens.add(temp_tok);
 						cur_Pos = index;
 					}
 				} catch (NumberFormatException e) {
@@ -80,43 +77,35 @@ public class Lexer {
 		System.out.println("Floats: " + FloatCounter);
 	}
 
-	private static void PrintIntTokens() {
-		for (IntToken cur : intTokens) {
+	private static void PrintTokens() {
+		for (LSToken cur : ls_Tokens) {
 			cur.printToken();
 		}
 	}
 
-	private static void PrintFloatTokens() {
-		for (FloatToken cur : floatTokens) {
-			cur.printToken();
-		}
-	}
-
-	private static class IntToken {
+	private static class LSToken {
 		private int value;
+		private float float_value;
 		private String type;
+		private boolean isFloat;
 
-		public IntToken(int value) {
+		public LSToken(int value) {
 			this.value = value;
 			this.type = "Int";
 		}
 
-		public void printToken() {
-			System.out.println("Type: " + type + " Value: " + value);
-		}
-	}
-
-	private static class FloatToken {
-		private float value;
-		private String type;
-
-		public FloatToken(float value) {
-			this.value = value;
+		public LSToken(float float_value) {
+			this.float_value = float_value;
 			this.type = "Float";
+			this.isFloat = true;
 		}
 
 		public void printToken() {
-			System.out.println("Type: " + type + " Value: " + value);
+			if (isFloat) {
+				System.out.println("Type: " + type + " Value: " + float_value);
+			} else {
+				System.out.println("Type: " + type + " Value: " + value);
+			}
 		}
 	}
 }
