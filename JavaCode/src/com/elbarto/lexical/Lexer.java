@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Lexer {
 	private static String[] letters;
+	private int lol = 0;
 	private static ArrayList<LSToken> ls_Tokens = new ArrayList<>();
 	private static int cur_Pos = 0;
 
