@@ -8,7 +8,7 @@ public class Lexer {
 	private static int cur_Pos = 0;
 
 	public static void main(String[] args) {
-		String line = "295 + 3.5456";
+		String line = "-295 + 3.5456";
 		Analyze(line);
 	}
 
