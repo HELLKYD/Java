@@ -33,13 +33,22 @@ public class Lexer {
 		int FloatCounter = 0;
 		while (cur_Pos < letters.length) {
 			String cur = letters[cur_Pos];
-			if (cur.equals(" ") || cur.equals("+") || cur.equals(".") || cur.equals("(") || cur.equals(")")) {
+			if (cur.equals(" ") || cur.equals(".") || cur.equals("(") || cur.equals(")")) {
 				cur_Pos++;
 				continue;
+			} else if (cur.equals("+")) {
+				LSToken temp_tok = new LSToken(cur);
+				ls_Tokens.add(temp_tok);
+				cur_Pos++;
+			} else if (cur.equals("-") && cur_Pos != 0) {
+				LSToken temp_tok = new LSToken(cur);
+				ls_Tokens.add(temp_tok);
+				cur_Pos++;
 			} else {
 				String not_converted_chars = cur;
 				int index = cur_Pos + 1;
 				boolean isFloat = false;
+				boolean isOperator = false;
 				while (index < letters.length) {
 					String temp = letters[index];
 					if (temp.equals(" ") || temp.equals("+")) {
@@ -68,7 +77,7 @@ public class Lexer {
 						cur_Pos = index;
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Error: Number too large");
+					System.out.println("Error: An Error occured with one of the numbers");
 					System.exit(404);
 				}
 			}
@@ -88,6 +97,8 @@ public class Lexer {
 		private float float_value;
 		private String type;
 		private boolean isFloat;
+		private boolean is_op;
+		private String op_value;
 
 		public LSToken(int value) {
 			this.value = value;
@@ -100,9 +111,17 @@ public class Lexer {
 			this.isFloat = true;
 		}
 
+		public LSToken(String op_value) {
+			this.is_op = true;
+			this.op_value = op_value;
+			this.type = "Operator";
+		}
+
 		public void printToken() {
 			if (isFloat) {
 				System.out.println("Type: " + type + " Value: " + float_value);
+			} else if (is_op) {
+				System.out.println("Type: " + type + " Value: " + op_value);
 			} else {
 				System.out.println("Type: " + type + " Value: " + value);
 			}
